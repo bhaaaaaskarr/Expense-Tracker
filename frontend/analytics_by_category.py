@@ -6,7 +6,7 @@ import requests
 APP_URL = "http://localhost:8000"
 
 
-def analytics_tab():
+def analytics_by_category_tab():
     col1, col2 = st.columns(2)
     with col1:
         start_date = st.date_input(label='Start Date', value=datetime(2024, 8, 1))

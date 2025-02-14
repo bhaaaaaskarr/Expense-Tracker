@@ -18,6 +18,9 @@ class DateRange(BaseModel):  # tells fastapi that data should be returned in thi
     start_date: date
     end_date: date
 
+class Monthly(BaseModel):
+    month:str
+    total:float
 
 app = FastAPI()
 
@@ -56,3 +59,16 @@ def get_analytics(date_range: DateRange):
                                     'percentage':percentage}
 
     return breakdown
+
+
+@app.get("/monthly_analytics/")
+def get_monthly_analytics():
+    expenses = db_helper.fetch_summary_by_month()
+    print('fetched expenses')
+
+    if not expenses:  # Check for empty list instead of None
+        raise HTTPException(status_code=404, detail="No expense data found.")
+
+    # Convert list of tuples to a structured JSON response
+
+    return expenses

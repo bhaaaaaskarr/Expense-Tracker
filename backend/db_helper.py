@@ -82,13 +82,27 @@ def fetch_summary(start_date, end_date):
         cursor.execute('''select category, sum(amount) as total from expenses
         where expense_date between %s and %s
         group by category
-        order by total desc''',(start_date,end_date))
-        expenses=cursor.fetchall()
+        order by total desc''', (start_date, end_date))
+        expenses = cursor.fetchall()
         return expenses
+
+
+def fetch_summary_by_month():
+    with fetch_db_cursor() as cursor:
+        cursor.execute('''
+        SELECT DATE_FORMAT(expense_date, '%Y-%m') AS month, sum(amount) as total
+        FROM expenses 
+        GROUP BY month
+        order by month
+        ''')
+        expenses = cursor.fetchall()
+        return expenses
+
 
 if __name__ == '__main__':
     # update_expenses('2020-04-14', 14, 'food', 'cake')
-    # delete_expenses_by_date('2020-04-14')
+    delete_expenses_by_date('2028-11-14')
     # print(fetch_expenses_by_date('2024-08-15'))
     # print(fetch_expenses_between_dates('2024-08-01', '2024-08-05'))
-    print(fetch_summary('2024-08-01','2024-08-08'))
+    # print(fetch_summary('2024-08-01', '2024-08-08'))
+    print(fetch_summary_by_month())
